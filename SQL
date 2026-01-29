@@ -1,0 +1,26 @@
+-- google, naver, kakao
+
+create table provider(
+    provider_id bigint primary key auto_increment,
+    provider_name varchar(30)
+);
+
+insert into provider(provider_name) values('homepage');
+insert into provider(provider_name) values('google');
+insert into provider(provider_name) values('naver');
+insert into provider(provider_name) values('kakao');
+
+drop table member;
+
+create table member(
+    member_id bigint primary key auto_increment,
+    homepage_id varchar(30),
+    password varchar(64) not null,
+    open_id varchar(255) unique,
+    email varchar(30),
+    name varchar(20),
+    regdate DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated DATETIME DEFAULT CURRENT_TIMESTAMP on update current_timestamp,
+    provider_id bigint,
+    constraint fk_provider_member foreign key (provider_id) references provider(provider_id)
+);
