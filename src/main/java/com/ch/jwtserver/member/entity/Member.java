@@ -1,7 +1,9 @@
 package com.ch.jwtserver.member.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @Table(name = "member")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member {
 
     @Id
@@ -40,5 +44,4 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "provider_id")
     private Provider provider;
-
 }
