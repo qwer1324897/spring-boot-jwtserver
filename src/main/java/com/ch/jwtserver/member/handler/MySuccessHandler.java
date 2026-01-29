@@ -1,9 +1,7 @@
 package com.ch.jwtserver.member.handler;
 
-import com.ch.jwtserver.member.dto.CustomUserDetails;
 import com.ch.jwtserver.member.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +11,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,20 +28,25 @@ public class MySuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException {
 
         log.debug("MySuccessHandler 성공");
-        // 1. 인증된 사용자 정보 가져오기
+
+        // 인증된 사용자 정보 가져오기
         String homepageId = authentication.getName();
-        // 2. JWT 토큰 생성
+
+        // JWT 토큰 생성
         String token = jwtTokenProvider.createAccessToken(homepageId, List.of("ROLE_USER"));
         log.debug("token is {} in MySuccessHandler", token);
-        // 3. JSON 응답 설정
+
+        // JSON 응답 설정
         response.setContentType("application/json;charset=UTF-8");
-        // 4. 응답 데이터 구성 및 전송
-        Map<String, Object> responseData = Map.of(
-                "ok", true,
-                "accessToken", token,
-                "tokenType", "Bearer",
-                "name", homepageId
-        );
+
+        // Map 형태로 전송
+        Map<String, Object> responseData = new HashMap<>();
+
+        responseData.put("ok", true);
+        responseData.put("accessToken", token);
+        responseData.put("tokenType", "Bearer");
+        responseData.put("name", homepageId);
+
         response.getWriter().write(objectMapper.writeValueAsString(responseData));
     }
 }
